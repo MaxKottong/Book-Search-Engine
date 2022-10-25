@@ -8,7 +8,7 @@ const resolvers = {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
                     .select('-__v -password')
-                    .populate('books');
+                    .populate('savedBooks');
 
                 return userData;
             }
@@ -42,12 +42,18 @@ const resolvers = {
             return { token, user };
         },
 
-        saveBook: async () => {
+        saveBook: async (parent, { book }, context) => {
+            if (context.user) {
+                const user = await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $push: { savedBooks: book } },
+                    { new: true }
+                )
 
-        },
+                return user;
+            }
 
-        removeBook: async () => {
-
+            throw new AuthenticationError('You need to be logged in');
         }
     }
 };
