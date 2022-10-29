@@ -8,7 +8,13 @@ export const LOGIN_USER = gql`
                 _id
                 username
                 email
-                savedBooks
+                savedBooks {
+                    bookId
+                    authors
+                    description
+                    title
+                    image
+                }
                 bookCount
             }
         }
@@ -16,8 +22,8 @@ export const LOGIN_USER = gql`
 `
 
 export const ADD_USER = gql`
-    mutation addUser($username: String!, $email: String!, $password: String!) {
-        addUser(username: $username, email: $email, password: $password) {
+    mutation addUser($email: String!,$username: String!,$password: String!) {
+        addUser(email: $email, username: $username, password: $password) {
             token
             user {
                 _id
@@ -28,29 +34,37 @@ export const ADD_USER = gql`
 `
 
 export const SAVE_BOOK = gql`
-    mutation saveBook($input: bookInput!) {
-        saveBook(input: $input) {
-            user {
+    mutation saveBook($bookId: String!, $authors: [String]!, $description: String!, $title: String!, $image: String!){
+        saveBook(bookId: $bookId, authors: $authors, description: $description, title: $title, image: $image) {
                 _id
                 username
                 email
-                savedBooks
+                savedBooks {
+                    bookId
+                    authors
+                    description
+                    title
+                    image
+                }
                 bookCount
-            }
         }
     }
 `
 
 export const REMOVE_BOOK = gql`
-    mutation removeBook($bookId: ID!) {
+    mutation removeBook($bookId: String!) {
         removeBook(bookId: $bookId) {
-            user {
                 _id
                 username
                 email
-                savedBooks
+                savedBooks {
+                    bookId
+                    authors
+                    description
+                    title
+                    image
+                }
                 bookCount
-            }
         }
     }
 `
